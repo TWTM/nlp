@@ -7,6 +7,10 @@ import PyPDF2
 import requests
 from bs4 import BeautifulSoup
 import io
+import nltk
+
+nltk.download('stopwords')
+stop = nltk.corpus.stopwords.words('portuguese')
 
 st.title('Análise Estatística de Texto')
 
@@ -29,7 +33,7 @@ elif option == 'Link da página web':
 
 if text:
     # Remoção de caracteres indesejados e tokenização
-    words = [word.lower() for word in text.split() and word.lower() not in stop]
+    words = [word.lower() for word in text.split() if word.lower() not in stop]
     count = Counter(words)
     most_common_words = count.most_common(20)
 
@@ -39,7 +43,7 @@ if text:
 
     st.write(df)
 
-    # Geração da nuvem de palavra
+    # Geração da nuvem de palavras
     wordcloud = WordCloud(width = 800, height = 400, background_color ='white').generate_from_frequencies(dict(count))
     plt.figure(figsize=(10,5))
     plt.imshow(wordcloud, interpolation='bilinear')
